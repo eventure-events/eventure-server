@@ -8,12 +8,15 @@ const Promise = require('./lib/promise');
 const path = require('path');
 mongoose.Promise = Promise;
 
+const eventRouter = require('./routes/event-router');
+
 const serverPort = process.env.PORT || 3000;
 const mongoDatabase = process.env.MONGODB_URI || 'mongodb://localhost/eventureTestDB';
 
 mongoose.connect(mongoDatabase);
 
 app.use(morgan('dev'));
+app.use('/api', eventRouter);
 app.get('/', (req, res) => {
   res.sendFile(path.join(`${__dirname}/index.html`));
 });
