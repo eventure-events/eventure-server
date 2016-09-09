@@ -3,6 +3,6 @@ node_js:
   - "4"
 sudo: require
 before_script:
-  - npm install
+  - npm install eslint
 after_success:
   - npm run lint
