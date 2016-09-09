@@ -6,9 +6,9 @@ const morgan = require('morgan');
 const mongoose = require('mongoose');
 const Promise = require('./lib/promise');
 mongoose.Promise = Promise;
-const serverPort = 3000;
 
-const mongoDatabase = 'mongodb://localhost/mongoDatabase';
+const serverPort = process.env.PORT || 3000;
+const mongoDatabase = process.env.MONGO_URI || 'mongodb://localhost/eventureTestDB';
 
 mongoose.connect(mongoDatabase);
 
