@@ -9,7 +9,7 @@ const path = require('path');
 mongoose.Promise = Promise;
 
 const serverPort = process.env.PORT || 3000;
-const mongoDatabase = process.env.MONGO_URI || 'mongodb://localhost/eventureTestDB';
+const mongoDatabase = process.env.MONGODB_URI || 'mongodb://localhost/eventureTestDB';
 
 mongoose.connect(mongoDatabase);
 
