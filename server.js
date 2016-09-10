@@ -6,6 +6,7 @@ const morgan = require('morgan');
 const mongoose = require('mongoose');
 const Promise = require('./lib/promise');
 const path = require('path');
+const cors = require('cors');
 mongoose.Promise = Promise;
 
 const eventRouter = require('./routes/event-router');
@@ -16,9 +17,11 @@ const mongoDatabase = process.env.MONGODB_URI || 'mongodb://localhost/eventureTe
 mongoose.connect(mongoDatabase);
 
 app.use(morgan('dev'));
+app.use(cors());
+
 app.use('/api', eventRouter);
 app.get('/', (req, res) => {
   res.sendFile(path.join(`${__dirname}/index.html`));
 });
 
-module.exports = exports = app.listen(serverPort, () => console.log('Server running at http://localhost:' + serverPort));
+module.exports = exports = app.listen(serverPort, () => console.log('Server running on ' + serverPort));
