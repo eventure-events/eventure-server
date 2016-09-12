@@ -6,38 +6,33 @@ chai.use(chaiHTTP);
 const request = chai.request;
 const expect = chai.expect;
 const mongoose = require('mongoose');
+const UserSchema = require('../models/User');
 
-const TESTING_SERVER = 'mongodb://localhost/testing_db';
+const TESTING_SERVER = 'mongodb://localhost/dev';
 process.env.DB_SERVER = TESTING_SERVER;
 
 let app = require('./test-server');
 
-let server, userToken;
-
-describe('testing server routes ', () => {
-  before((done) => {
-    server = app.listen(5000, () => {
-      console.log('Server on 5000');
-      // request('localhost:5000')
-      //   .post('/api/signup')
-      //   .send({username:'testuser', password:'testpassword', email:'test@email.com', name:'testname'})
-      //   .end();
-      done();
+describe('CRUD tests', () => {
+  let userToken, newUser;
+  beforeEach(function(done){
+    app.listen(5000, () => {
+      console.log('Server up on 5000');
     });
-  });
-  after((done) =>{
     mongoose.connection.db.dropDatabase(()=>{
       mongoose.disconnect(() => {
-        server.close();
-        done();
+        app.close();
       });
     });
+    newUser = UserSchema({username:'testuser', password: 'testpassword', name: 'testname', email: 'testemail'});
+    newUser.save();
+    done();
   });
 
   it('should POST a new user', (done) => {
     request('localhost:5000')
       .post('/api/signup')
-      .send({username:'test2user', password:'test2password', email:'test2@email.com', name:'test2name'})
+      .send({username:'user', password:'password', email:'email@email.com', name:'name'})
       .end((err, res) => {
         expect(res).to.have.status(200);
         expect(res.body).to.have.property('token');
@@ -45,7 +40,7 @@ describe('testing server routes ', () => {
       });
   });
 
-  it('should GET a user', (done) => {
+  it('should GET a user', function(done){
     request('localhost:5000')
       .get('/api/signin')
       .auth('test2user', 'test2password')
@@ -68,7 +63,7 @@ describe('testing server routes ', () => {
       });
   });
 
-  it('should POST a new event', (done) => {
+  it('should POST a new event', function(done){
     request('localhost:5000')
       .post('/api/event')
       .set('Authorization', 'Bearer ' + userToken)
@@ -80,9 +75,21 @@ describe('testing server routes ', () => {
       });
   });
 
-  it('should not POST a new event', (done) => {
+  it('should not POST a new event', function(done){
     request('localhost:5000')
       .post('/api/event')
+      .set('Authorization', 'Bearer' + 'wrong')
+      .send({name: 'test party', visibility: 'public', location: 'code fellows', description: 'party over here'})
+      .end((err, res) => {
+        expect(err).to.eql(null);
+        expect(res).to.have.status(404);
+        done();
+      });
+  });
+
+  it('should not DELETE an event', function(done){
+    request('localhost:5000')
+      .delete('/api/event')
       .set('Authorization', 'Bearer' + 'wrong')
       .send({name: 'test party', visibility: 'public', location: 'code fellows', description: 'party over here'})
       .end((err, res) => {
