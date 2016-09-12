@@ -16,6 +16,7 @@
   "devDependencies": {
     "chai": "^3.5.0",
     "chai-http": "^3.0.0",
+    "debug": "^2.2.0",
     "gulp": "^3.9.1",
     "gulp-eslint": "^3.0.1",
     "gulp-mocha": "^2.2.0",
@@ -23,10 +24,13 @@
     "mocha": "^2.5.3"
   },
   "dependencies": {
+    "bcrypt": "^0.8.7",
     "body-parser": "^1.15.2",
+    "cors": "^2.8.1",
     "express": "^4.14.0",
+    "jsonwebtoken": "^7.1.9",
     "mongoose": "^4.5.8",
-    "path": "^0.12.7",
-    "morgan": "^1.7.0"
+    "morgan": "^1.7.0",
+    "path": "^0.12.7"
   }
 }
