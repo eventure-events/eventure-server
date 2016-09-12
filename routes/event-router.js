@@ -15,7 +15,7 @@ const eventRouter = module.exports = exports = Router();
 eventRouter.post('/', jsonParser, authBearerParser, authorization([BASIC]), (req, res, next) => {
   console.log('request: POST /event');
   const newEvent = new Eventure(req.body);
-  newEvent.createdBy = req.body.userId;
+  newEvent.createdBy = req.user._id;
   newEvent.save((err, evnt) => {
     if (err) {
       return console.log(err);
