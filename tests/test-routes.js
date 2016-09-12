@@ -87,16 +87,4 @@ describe('CRUD tests', () => {
       });
   });
 
-  it('should not DELETE an event', function(done){
-    request('localhost:5000')
-      .delete('/api/event')
-      .set('Authorization', 'Bearer' + 'wrong')
-      .send({name: 'test party', visibility: 'public', location: 'code fellows', description: 'party over here'})
-      .end((err, res) => {
-        expect(err).to.eql(null);
-        expect(res).to.have.status(404);
-        done();
-      });
-  });
-
 });
