@@ -8,10 +8,10 @@ const Promise = require('./lib/promise');
 // const path = require('path');
 const cors = require('cors');
 const httpError = require('http-errors');
-const errorHandler = require('./lib/error_handler');
+const errorHandler = require('./lib/error-handler');
 mongoose.Promise = Promise;
 
-const authRouter = require('./route/auth_router');
+const authRouter = require('./routes/auth-router');
 const eventRouter = require('./routes/event-router');
 
 process.env.APP_SECRET = 'dev secret'; //temporary

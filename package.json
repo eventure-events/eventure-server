@@ -24,9 +24,11 @@
     "mocha": "^2.5.3"
   },
   "dependencies": {
+    "bcrypt": "^0.8.7",
     "body-parser": "^1.15.2",
     "cors": "^2.8.1",
     "express": "^4.14.0",
+    "jsonwebtoken": "^7.1.9",
     "mongoose": "^4.5.8",
     "morgan": "^1.7.0",
     "path": "^0.12.7"
