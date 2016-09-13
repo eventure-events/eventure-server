@@ -1,15 +1,37 @@
+'use strict';
+
+const express = require('express');
+let app = express();
+const morgan = require('morgan');
 const mongoose = require('mongoose');
-const jwt_auth = require('../lib/jwt_auth');
+const Promise = require('../lib/promise');
+const cors = require('cors');
+const httpError = require('http-errors');
+const errorHandler = require('../lib/error-handler');
+mongoose.Promise = Promise;
 
-mongoose.connect('mongodb://localhost/auth_test');
-app = require('express')();
-const authRouter = require('../routes/auth_router');
+const authRouter = require('../routes/auth-router');
+const eventRouter = require('../routes/event-router');
+
+process.env.APP_SECRET = 'dev secret'; //temporary
+
+const port = process.env.PORT || 5000;
+const mongoDatabase = process.env.MONGODB_URI || 'mongodb://localhost/eventureTestDB';
+
+mongoose.connect(mongoDatabase);
+
+app.use(morgan('dev'));
+app.use(cors());
+
 app.use('/api', authRouter);
-app.get('/api/jwt_auth', jwt_auth, function(req, res) {
-  res.json({msg: 'success!'});
+app.use('/api/event', eventRouter);
+
+app.all('*', (req, res, next) => {
+  next(httpError(404, 'route not registered'));
 });
 
-app.use((err, req, res, next) => {
-  res.status(err.statusCode).json(err.message);
+app.use(errorHandler);
+
+app.listen(port, () => {
+  console.log(`Server listening at http://localhost:${port}`);
 });
-app.listen(5000);

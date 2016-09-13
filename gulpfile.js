@@ -5,7 +5,7 @@ const eslint = require('gulp-eslint');
 const mocha = require('gulp-mocha');
 const nodemon = require('gulp-nodemon');
 
-let testFiles = ['./tests/test-routes.js'];
+let testFiles = ['./test/test_harness.js'];
 var scriptFiles = ['./*.js', './model/*.js', './route/*.js'];
 
 gulp.task('lint', () => {
