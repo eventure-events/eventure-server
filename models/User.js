@@ -7,7 +7,7 @@ const jwt = require('jsonwebtoken');
 const httpError = require('http-errors');
 
 const userSchema = Schema({
-  username: { type: String },
+  username: { type: String , required: true, unique: true},
   basic: {
     name: { type: String, required: true },
     email: { type: String, required: true, unique: true },
