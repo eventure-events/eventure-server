@@ -9,12 +9,12 @@ const signin = require('../lib/signin');
 
 authRouter.post('/signup', jsonParser, (req, res, next) => {
   signup(req)
-  .then(token => res.json(token))
+  .then(userInfo => res.json(userInfo))
   .catch(next);
 });
 
 authRouter.get('/signin', authBasicParser, (req, res, next) => {
   signin(req)
-  .then(token => res.json(token))
+  .then(userInfo => res.json(userInfo))
   .catch(next);
 });
