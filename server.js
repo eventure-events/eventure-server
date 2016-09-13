@@ -13,6 +13,7 @@ mongoose.Promise = Promise;
 
 const authRouter = require('./routes/auth-router');
 const eventRouter = require('./routes/event-router');
+const userRouter = require('./routes/user-router');
 
 process.env.APP_SECRET = 'dev secret'; //temporary
 
@@ -26,6 +27,7 @@ app.use(cors());
 
 app.use('/api', authRouter);
 app.use('/api/event', eventRouter);
+app.use('/api/user', userRouter);
 // app.get('/', (req, res) => {
 //   res.sendFile(path.join(`${__dirname}/index.html`));
 // });
