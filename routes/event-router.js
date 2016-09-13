@@ -38,19 +38,21 @@ eventRouter.get('/public', (req, res, next) => {
   }).catch(next);
 });
 
-eventRouter.
+// eventRouter.get('/testGet', (req, res, next) => {
+//   const searchQueries = {
+//     'visibility': 'public',
+//     'description': 'test event',
+//   };
+//   Eventure.find(searchQueries)
+//     .exec()
+//     .then(function(foundEvents) {
+//       res.json(foundEvents);
+//     })
+//     .catch(next);
+// });
 
-eventRouter.get('/testGet', (req, res, next) => {
-  const searchQueries = {
-    'visibility': 'public',
-    'description': 'test event',
-  };
-  Eventure.find(searchQueries)
-    .exec()
-    .then(function(foundEvents) {
-      res.json(foundEvents);
-    })
-    .catch(next);
+eventRouter.get('/user/:username/all', (req, res, next) => {
+  
 });
 
 eventRouter.get('/public', (req, res, next) => {
