@@ -38,6 +38,8 @@ eventRouter.get('/public', (req, res, next) => {
   }).catch(next);
 });
 
+eventRouter.
+
 eventRouter.get('/testGet', (req, res, next) => {
   const searchQueries = {
     'visibility': 'public',
