@@ -1,2 +1,21 @@
-node_modules
+### Database ###
 db
+
+
+### NPM ###
+node_modules
+
+
+### Node ###
+# Logs
+logs
+*.log
+npm-debug.log*
+
+
+# Coverage directory used by tools like istanbul
+.test/coverage
+
+
+# Webpack build
+build
