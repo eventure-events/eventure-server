@@ -8,18 +8,24 @@ const baseUrl = 'localhost:5000/api';
 const User = require('../models/User');
 
 describe('CRUD tests', function() {
-  let userToken;
 
   before(function(done) {
-    this.newUser = new User({
+    let newUser = new User({
       username: 'testuser',
       basic: {
         name: 'testname',
         email: 'test@email.com',
         password:'testpassword',
       },
-    }),
-    done();
+    });
+    newUser.generateHash(newUser.basic.password)
+    .then(newUser => newUser.save()) // http error for duplicated username here
+    .then(newUser => newUser.generateToken())
+    .then(token => {
+      this.token = token.token;
+      done();
+    });
+
   });
 
   after((done) => {
@@ -43,8 +49,6 @@ describe('CRUD tests', function() {
       .get('/signin')
       .auth('user', 'password')
       .end((err, res) => {
-        userToken = res.body.token;
-        console.log('userToken: ', userToken);
         expect(err).to.eql(null);
         expect(res).to.have.status(200);
         expect(res.body).to.have.property('token');
@@ -63,10 +67,9 @@ describe('CRUD tests', function() {
   });
 
   it('should POST a new event', function(done){
-    console.log('userToken.token: ', userToken.token);
     request(baseUrl)
       .post('/event')
-      .set('Authorization', 'Bearer ' + userToken.token)
+      .set('Authorization', 'Bearer ' + this.token)
       .send({name: 'testparty', visibility: 'public', location: 'code fellows', description: 'partyoverhere'})
       .end((err, res) => {
         expect(err).to.eql(null);
@@ -74,17 +77,25 @@ describe('CRUD tests', function() {
         done();
       });
   });
-  //
-  // it('should not POST a new event', function(done){
+
+  it('should not POST a new event', function(done){
+    request(baseUrl)
+      .post('/event')
+      .set('Authorization', 'Bearer' + 'wrong')
+      .send({name: 'test party', visibility: 'public', location: 'code fellows', description: 'party over here'})
+      .end((err, res) => {
+        expect(res).to.have.status(401);
+        done();
+      });
+  });
+
+  // it('should DELETE an event', function(done){
   //   request(baseUrl)
-  //     .post('/event')
-  //     .set('Authorization', 'Bearer' + 'wrong')
-  //     .send({name: 'test party', visibility: 'public', location: 'code fellows', description: 'party over here'})
+  //     .delete('/event/' + )
+  //     .set('Authorization', 'Bearer' + this.token)
   //     .end((err, res) => {
-  //       expect(err).to.eql(null);
-  //       expect(res).to.have.status(404);
+  //       expect(res).to.have.status(401);
   //       done();
   //     });
   // });
-
 });
