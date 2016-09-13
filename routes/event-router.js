@@ -16,43 +16,19 @@ eventRouter.post('/', jsonParser, authBearerParser, authorization([BASIC]), (req
   const newEvent = new Eventure(req.body);
   newEvent.userId = req.user._id;
   newEvent.username = req.user.username;
-  newEvent.save((err, evnt) => {
-    if (err) {
-      return console.log(err);
-    }
+  newEvent.save()
+  .then((evnt) => {
+    res.json(evnt);
   })
-    .then((evnt) => {
-      res.json(evnt);
-    })
-    .catch(next);
+  .catch(next);
 });
-
-eventRouter.get('/public', (req, res, next) => {
-  console.log('request: GET /event :: all events');
-  Eventure.find({visibility: 'public'})
-  .then((all) => {
-    if (!all) {
-      return next(httpError(404, 'No events found.'));
-    }
-    res.json(all);
-  }).catch(next);
-});
-
-// eventRouter.get('/testGet', (req, res, next) => {
-//   const searchQueries = {
-//     'visibility': 'public',
-//     'description': 'test event',
-//   };
-//   Eventure.find(searchQueries)
-//     .exec()
-//     .then(function(foundEvents) {
-//       res.json(foundEvents);
-//     })
-//     .catch(next);
-// });
 
 eventRouter.get('/user/:username/all', (req, res, next) => {
-  
+  Eventure.find({username: req.params.username})
+  .then((all) => {
+    res.json(all);
+  })
+  .catch(next);
 });
 
 eventRouter.get('/public', (req, res, next) => {

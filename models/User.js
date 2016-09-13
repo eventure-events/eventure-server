@@ -15,7 +15,7 @@ const userSchema = Schema({
     findHash: { type: String, unique: true },
   },
   role: { type: String, default: 'basic', required: true },
-  following: [{ type: Schema.Types.ObjectId, ref: 'User' }],
+  following: [{ type: String, ref: 'User' }],
 });
 
 userSchema.methods = {
