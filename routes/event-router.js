@@ -14,7 +14,8 @@ const eventRouter = module.exports = exports = Router();
 
 eventRouter.post('/', jsonParser, authBearerParser, authorization([BASIC]), (req, res, next) => {
   const newEvent = new Eventure(req.body);
-  newEvent.createdBy = req.user._id;
+  newEvent.userId = req.user._id;
+  newEvent.username = req.user.username;
   newEvent.save((err, evnt) => {
     if (err) {
       return console.log(err);
@@ -61,16 +62,6 @@ eventRouter.get('/public', (req, res, next) => {
   .catch(next);
 });
 
-// userFollowees = []
-// Users.find(jeff)
-// .then(jeff =>  {
-//   userFollowees = jeff.following;
-//   Events.findMany(createdBy: userFollowees)
-//   .then(all events by followees => {
-//     res json
-//   })
-// })
-
 eventRouter.get('/:id', (req, res, next) => {
   console.log('request: GET /event' + req.params.id);
   Eventure.findById({
@@ -85,7 +76,7 @@ eventRouter.get('/:id', (req, res, next) => {
     .catch(next);
 });
 
-// have to check createdBy and verify that the same user is attempting to modify it
+// have to check userId and verify that the same user is attempting to modify it
 eventRouter.put('/:id', jsonParser, authBearerParser, authorization([BASIC]), (req, res, next) => {
   console.log('request: PUT /event' + req.params.id);
   Eventure.findById(req.params.id)
@@ -94,7 +85,7 @@ eventRouter.put('/:id', jsonParser, authBearerParser, authorization([BASIC]), (r
       return next(httpError(404, 'No such event found'));
     }
 
-    if (!ev.createdBy.equals(req.user._id)) {
+    if (!ev.userId.equals(req.user._id)) {
       return next(httpError(401, 'Not authorized to do so'));
     }
 
@@ -115,7 +106,7 @@ eventRouter.delete('/:id', jsonParser, authBearerParser, authorization([BASIC]),
       return next(httpError(404, 'No such event found'));
     }
 
-    if (!ev.createdBy.equals(req.user._id)) {
+    if (!ev.userId.equals(req.user._id)) {
       return next(httpError(401, 'Not authorized to do so'));
     }
 
