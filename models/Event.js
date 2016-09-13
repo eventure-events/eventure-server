@@ -11,7 +11,8 @@ const eventSchema = Schema({
   },
   location: { type: String, required: true },
   description: { type: String, required: true },
-  createdBy: { type: Schema.Types.ObjectId, ref: 'User' },
+  userId: { type: Schema.Types.ObjectId, ref: 'User' },
+  username: { type: String },
   attending: [{ type: Schema.Types.ObjectId, ref: 'User' }],
 });
 
