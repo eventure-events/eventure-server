@@ -10,8 +10,10 @@ const eventSchema = Schema({
     required: true,
   },
   location: { type: String, required: true },
+  latLong: {lat: Number, lng: Number},
   description: { type: String, required: true },
-  createdBy: { type: Schema.Types.ObjectId, ref: 'User' },
+  userId: { type: Schema.Types.ObjectId, ref: 'User' },
+  username: { type: String },
   attending: [{ type: Schema.Types.ObjectId, ref: 'User' }],
 });
 

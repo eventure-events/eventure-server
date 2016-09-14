@@ -7,7 +7,7 @@ const jwt = require('jsonwebtoken');
 const httpError = require('http-errors');
 
 const userSchema = Schema({
-  username: { type: String },
+  username: { type: String , required: true, unique: true},
   basic: {
     name: { type: String, required: true },
     email: { type: String, required: true, unique: true },
@@ -15,7 +15,7 @@ const userSchema = Schema({
     findHash: { type: String, unique: true },
   },
   role: { type: String, default: 'basic', required: true },
-  following: [{ type: Schema.Types.ObjectId, ref: 'User' }],
+  following: [{ type: String, ref: 'User' }],
 });
 
 userSchema.methods = {
