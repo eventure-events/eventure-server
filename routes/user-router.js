@@ -16,7 +16,6 @@ const userRouter = module.exports = exports = Router();
 userRouter.get('/all', authBearerParser, authorization([BASIC]), (req, res, next) => {
   User.find()
   .then(users => {
-    console.log('users, ', users);
     res.json(users);
   })
   .catch(next);
