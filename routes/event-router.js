@@ -33,11 +33,43 @@ eventRouter.get('/user/:username/all', (req, res, next) => {
 
 eventRouter.get('/public', (req, res, next) => {
   console.log('request: GET /event :: all events');
-  Eventure.find({visibility: 'public'}).then((all) => {
+  Eventure.find({visibility: 'public'})
+  .then((all) => {
     if (!all) {
       return next(httpError(404, 'No events found.'));
     }
     res.json(all);
+  })
+  .catch(next);
+});
+
+eventRouter.get('/followed', authBearerParser, authorization([BASIC]), (req, res, next) => {
+  console.log('request: GET /followed :: followed people events');
+  Eventure.find({ username: { $in: req.user.following } })
+  .exec()
+  .then(ev => {
+    res.json(ev);
+  })
+  .catch(next);
+});
+
+eventRouter.get('/allVisible', authBearerParser, authorization([BASIC]), (req, res, next) => {
+  const allVisibleEvents = [];
+  Eventure.find({visibility: 'public'})
+  .then(publicEvents => {
+    Eventure.find({ username: { $in: req.user.following }, visibility: 'private'})
+    .then(followedEvents => {
+      console.log('followed events', followedEvents);
+      followedEvents.forEach(item => {
+        allVisibleEvents.push(item);
+      });
+
+      publicEvents.forEach(item => {
+        allVisibleEvents.push(item);
+      });
+
+      res.json(allVisibleEvents);
+    });
   })
   .catch(next);
 });

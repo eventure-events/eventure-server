@@ -6,11 +6,12 @@ const expect = chai.expect;
 const request = chai.request;
 const baseUrl = 'localhost:5000/api';
 const User = require('../models/User');
+const Event = require('../models/Event');
 
 describe('CRUD tests', function() {
-
+  let newEvent, newUser;
   before(function(done) {
-    let newUser = new User({
+    newUser = new User({
       username: 'testuser',
       basic: {
         name: 'testname',
@@ -23,6 +24,12 @@ describe('CRUD tests', function() {
     .then(newUser => newUser.generateToken())
     .then(token => {
       this.token = token.token;
+      newEvent = new Event({
+        name: 'testevent',
+        visibility: 'public',
+        location: 'Seattle, WA',
+        description: 'testdescription',
+      });
       done();
     });
 
@@ -89,13 +96,101 @@ describe('CRUD tests', function() {
       });
   });
 
+  it('should GET all events', function(done){
+    request(baseUrl)
+      .get('/event/public')
+      .auth('user', 'password')
+      .end((err, res) => {
+        expect(err).to.eql(null);
+        expect(res).to.have.status(200);
+        done();
+      });
+  });
+
   // it('should DELETE an event', function(done){
   //   request(baseUrl)
-  //     .delete('/event/' + )
+  //     .delete('/event/' + newEvent._id)
+  //     .auth('user', 'password')
   //     .set('Authorization', 'Bearer' + this.token)
   //     .end((err, res) => {
-  //       expect(res).to.have.status(401);
+  //       expect(err).to.eql(null);
+  //       expect(res).to.have.status(200);
   //       done();
   //     });
   // });
+
+  it('should not DELETE an event', function(done){
+    request(baseUrl)
+      .delete('/event/' + newEvent._id)
+      .end((err, res) => {
+        expect(res).to.have.status(401);
+        done();
+      });
+  });
+
+  it('should GET all events', function(done){
+    request(baseUrl)
+      .get('/event/user/' + newUser.username + '/all')
+      .set('Authorization', 'Bearer' + this.token)
+      .end((err, res) => {
+        expect(err).to.eql(null);
+        expect(res).to.have.status(200);
+        done();
+      });
+  });
+
+  // it('should GET all users', function(done){
+  //   request(baseUrl)
+  //     .get('/user/all')
+  //     .set('Authorization', 'Bearer' + this.token)
+  //     .end((err, res) => {
+  //       expect(err).to.eql(null);
+  //       expect(res).to.have.status(200);
+  //       done();
+  //     });
+  // });
+
+  // it('should GET followed events', function(done){
+  //   request(baseUrl)
+  //     .get('/event/followed')
+  //     .set('Authorization', 'Bearer' + this.token)
+  //     .end((err, res) => {
+  //       expect(err).to.eql(null);
+  //       expect(res).to.have.status(200);
+  //       done();
+  //     });
+  // });
+
+  it('should not GET followed events', function(done){
+    request(baseUrl)
+      .get('/event/followed')
+      .end((err, res) => {
+        expect(res).to.have.status(401);
+        done();
+      });
+  });
+
+  // it('should GET a user', function(done){
+  //   request(baseUrl)
+  //     .get('/user/' + newUser.username)
+  //     .set('Authorization', 'Bearer' + this.token)
+  //     .end((err, res) => {
+  //       expect(err).to.eql(null);
+  //       expect(res).to.have.status(200);
+  //       done();
+  //     });
+  // });
+
+  // it('should POST following a user', function(done){
+  //   request(baseUrl)
+  //     .post('/user/' + newUser.username + '/follow/user')
+  //     .set('Authorization', 'Bearer' + this.token)
+  //     .end((err, res) => {
+  //       expect(err).to.eql(null);
+  //       expect(res).to.have.status(200);
+  //       done();
+  //     });
+  // });
+
+
 });
