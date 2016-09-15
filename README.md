@@ -1,4 +1,4 @@
-# ![Eventure](./app/resources/logo-large.png)
+# Eventure Server
 ## About  
 Eventure is a full-stack web application designed to help users find nearby events. They can create their own events and follow their friends events. The map view allows for easy navigation to find events happening close to a users location.  
 
