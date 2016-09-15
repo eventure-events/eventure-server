@@ -26,6 +26,7 @@ eventRouter.post('/', jsonParser, authBearerParser, authorization([BASIC]), (req
 eventRouter.get('/user/:username/all', (req, res, next) => {
   Eventure.find({username: req.params.username})
   .then((all) => {
+    console.log('all: ', all[0]);
     res.json(all);
   })
   .catch(next);
