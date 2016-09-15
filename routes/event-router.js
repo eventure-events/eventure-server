@@ -57,10 +57,17 @@ eventRouter.get('/allVisible', authBearerParser, authorization([BASIC]), (req, r
   const allVisibleEvents = [];
   Eventure.find({visibility: 'public'})
   .then(publicEvents => {
-    Eventure.find({ username: { $in: req.user.following } })
+    Eventure.find({ username: { $in: req.user.following }, visibility: 'private'})
     .then(followedEvents => {
-      allVisibleEvents.push(publicEvents);
-      allVisibleEvents.push(followedEvents);
+      console.log('followed events', followedEvents);
+      followedEvents.forEach(item => {
+        allVisibleEvents.push(item);
+      });
+
+      publicEvents.forEach(item => {
+        allVisibleEvents.push(item);
+      });
+
       res.json(allVisibleEvents);
     });
   })
