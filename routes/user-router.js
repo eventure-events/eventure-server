@@ -30,6 +30,7 @@ userRouter.get('/:username', authBearerParser, authorization([BASIC]), (req, res
 });
 
 userRouter.post('/:username/follow/:followeeName', authBearerParser, authorization([BASIC]), (req, res, next) => {
+  console.log(req.user);
   User.findOneAndUpdate(
     {username: req.params.username},
     {$push: {'following': req.params.followeeName}},
