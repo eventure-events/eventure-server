@@ -15,6 +15,7 @@ const eventSchema = Schema({
   userId: { type: Schema.Types.ObjectId, ref: 'User' },
   username: { type: String },
   attending: [{ type: Schema.Types.ObjectId, ref: 'User' }],
+  eventPic: {type: String},
 });
 
 

@@ -16,6 +16,7 @@ const userSchema = Schema({
   },
   role: { type: String, default: 'basic', required: true },
   following: [{ type: String, ref: 'User' }],
+  profilePic: {type: String, default: 'http://i.imgur.com/A5IsZlx.png'},
 });
 
 userSchema.methods = {
