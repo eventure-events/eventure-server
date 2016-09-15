@@ -24,7 +24,6 @@ userRouter.get('/all', authBearerParser, authorization([BASIC]), (req, res, next
 userRouter.get('/:username', authBearerParser, authorization([BASIC]), (req, res, next) => {
   User.findOne({username: req.params.username})
   .then(user => {
-    console.log('user, ', user);
     res.json(user);
   })
   .catch(next);
