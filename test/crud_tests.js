@@ -107,10 +107,21 @@ describe('CRUD tests', function() {
       });
   });
 
-  it('should DELETE an event', function(done){
+  // it('should DELETE an event', function(done){
+  //   request(baseUrl)
+  //     .delete('/event/' + newEvent._id)
+  //     .auth('user', 'password')
+  //     .set('Authorization', 'Bearer' + this.token)
+  //     .end((err, res) => {
+  //       expect(err).to.eql(null);
+  //       expect(res).to.have.status(200);
+  //       done();
+  //     });
+  // });
+
+  it('should not DELETE an event', function(done){
     request(baseUrl)
       .delete('/event/' + newEvent._id)
-      .set('Authorization', 'Bearer' + this.token)
       .end((err, res) => {
         expect(res).to.have.status(401);
         done();
@@ -149,6 +160,15 @@ describe('CRUD tests', function() {
   //       done();
   //     });
   // });
+
+  it('should not GET followed events', function(done){
+    request(baseUrl)
+      .get('/event/followed')
+      .end((err, res) => {
+        expect(res).to.have.status(401);
+        done();
+      });
+  });
 
   // it('should GET a user', function(done){
   //   request(baseUrl)
