@@ -12,13 +12,13 @@ const eventSchema = Schema({
   location: { type: String, required: true },
   latLong: {lat: Number, lng: Number},
   description: { type: String, required: true },
-  date: { type: String, required: true },
-  startTime: { type: String, required: true },
-  endTime: { type: String, required: true },
+  eventStart: { type: Date},
+  eventEnd: { type: Date},
   userId: { type: Schema.Types.ObjectId, ref: 'User' },
   username: { type: String },
   attending: [{ type: Schema.Types.ObjectId, ref: 'User' }],
   eventPic: {type: String},
+  comments: [{type: String}],
 });
 
 

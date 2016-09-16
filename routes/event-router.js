@@ -110,7 +110,7 @@ eventRouter.put('/:id', jsonParser, authBearerParser, authorization([BASIC]), (r
 });
 
 // have to check createdBy and verify that the same user is attempting to modify it
-eventRouter.delete('/:id', jsonParser, authBearerParser, authorization([BASIC]), (req, res, next) => {
+eventRouter.delete('/:id', authBearerParser, authorization([BASIC]), (req, res, next) => {
   console.log('request: DELETE /event' + req.params.id);
   Eventure.findById(req.params.id)
   .then(ev => {
@@ -127,5 +127,22 @@ eventRouter.delete('/:id', jsonParser, authBearerParser, authorization([BASIC]),
       res.json(ev);
     });
   })
-    .catch(next);
+  .catch(next);
+});
+
+eventRouter.post('/:id/comment', jsonParser, authBearerParser, authorization([BASIC]), (req, res, next) => {
+  console.log('request: POST /event/:id/comment' + req.params.id);
+  console.log(req.body.comment);
+  const newComment = req.user.username + ': ' + req.body.comment;
+
+  Eventure.findByIdAndUpdate(
+    req.params.id,
+    {$push: {'comments': newComment}},
+    {new : true}
+  )
+  .then((ev) => {
+    console.log(ev);
+    res.json(newComment);
+  })
+  .catch(next);
 });
