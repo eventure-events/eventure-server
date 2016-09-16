@@ -19,6 +19,7 @@
     "debug": "^2.2.0",
     "gulp": "^3.9.1",
     "gulp-eslint": "^3.0.1",
+    "gulp-istanbul": "^1.1.1",
     "gulp-mocha": "^2.2.0",
     "gulp-nodemon": "^2.1.0",
     "mocha": "^2.5.3"
