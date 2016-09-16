@@ -4,9 +4,10 @@ const gulp = require('gulp');
 const eslint = require('gulp-eslint');
 const mocha = require('gulp-mocha');
 const nodemon = require('gulp-nodemon');
+const istanbul = require('gulp-istanbul');
 
 let testFiles = ['./test/test_harness.js'];
-var scriptFiles = ['./*.js', './model/*.js', './route/*.js'];
+var scriptFiles = ['./*.js', './models/*.js', './routes/*.js', './lib/*.js'];
 
 gulp.task('lint', () => {
   return gulp.src(['**/*.js', '!node_modules/**'])
@@ -27,9 +28,17 @@ gulp.task('watch', () => {
   gulp.watch([scriptFiles, testFiles], ['lint']);
 });
 
-gulp.task('mocha', () =>
-  gulp.src(testFiles)
+gulp.task('pre-test', () => (
+  gulp.src(scriptFiles)
+    .pipe(istanbul())
+    .pipe(istanbul.hookRequire())
+));
+
+gulp.task('mocha', ['pre-test'], () =>
+  gulp.src(testFiles, { read: false })
     .pipe(mocha())
+    .pipe(istanbul.writeReports())
+    .pipe(istanbul.enforceThresholds({ thresholds: { global: 90 } }))
     .once('error', () => {
       process.exit(1);
     })
