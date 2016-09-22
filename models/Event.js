@@ -12,12 +12,14 @@ const eventSchema = Schema({
   location: { type: String, required: true },
   latLong: {lat: Number, lng: Number},
   description: { type: String, required: true },
-  eventStart: { type: Date},
-  eventEnd: { type: Date},
+  eventStartDate: { type: String},
+  eventEndDate: { type: String},
+  eventStartTime: { type: String},
+  eventEndTime: { type: String},
   userId: { type: Schema.Types.ObjectId, ref: 'User' },
   username: { type: String },
   attending: [{ type: Schema.Types.ObjectId, ref: 'User' }],
-  eventPic: {type: String},
+  eventPic: {type: String, default: 'http://www.q7stars.com/wp-content/uploads/2014/09/event-icon.jpg'},
   comments: [{type: String}],
 });
 
