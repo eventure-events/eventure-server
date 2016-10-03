@@ -36,6 +36,8 @@ eventRouter.get('/public', (req, res, next) => {
   console.log('request: GET /event :: all events');
   Eventure.find({visibility: 'public'})
   .then((all) => {
+    //an empty array will actually return true so this will never trigger
+    //what you want is all.length
     if (!all) {
       return next(httpError(404, 'No events found.'));
     }
@@ -56,6 +58,8 @@ eventRouter.get('/followed', authBearerParser, authorization([BASIC]), (req, res
 
 eventRouter.get('/allVisible', authBearerParser, authorization([BASIC]), (req, res, next) => {
   const allVisibleEvents = [];
+  //a much better way to do this would be to fire all of these at once, save the promises into an array and pass
+  //them off to a Promise.all, it would make for much cleaner code as well
   Eventure.find({visibility: 'public'})
   .then(publicEvents => {
     Eventure.find({ username: { $in: req.user.following }, visibility: 'private'})
@@ -119,8 +123,10 @@ eventRouter.put('/:id', jsonParser, authBearerParser, authorization([BASIC]), (r
 // have to check createdBy and verify that the same user is attempting to modify it
 eventRouter.delete('/:id', authBearerParser, authorization([BASIC]), (req, res, next) => {
   console.log('request: DELETE /event' + req.params.id);
+  //I think you actually want a findOneById here
   Eventure.findById(req.params.id)
   .then(ev => {
+    //you're going to run into the same array error here
     if (!ev) {
       return next(httpError(404, 'No such event found'));
     }
