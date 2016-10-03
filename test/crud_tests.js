@@ -1,4 +1,5 @@
 'use strict';
+//there are a lot of commented out tests in here, either get rid of them or make them work
 const chai = require('chai');
 const chaiHttp = require('chai-http');
 chai.use(chaiHttp);
